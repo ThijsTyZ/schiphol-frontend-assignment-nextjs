@@ -4,4 +4,7 @@ export const Pages = {
 
 export const Params = {
   Query: 'query',
+  SortOn: 'sort',
+  SortDirection: 'dir',
+  Limit: 'limit',
 } as const;

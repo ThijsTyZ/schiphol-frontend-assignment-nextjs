@@ -2,7 +2,7 @@
 
 import { useCallback, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Pages, Params } from '@/app/routes';
+import { Pages, Params } from '@/app/data/routes';
 
 export type SearchFormProps = {};
 
