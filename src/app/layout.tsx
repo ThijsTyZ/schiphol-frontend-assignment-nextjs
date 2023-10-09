@@ -1,8 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import SearchBar from '@/app/components/SearchBar';
-import { useCallback } from 'react';
+import SearchBar from '@/components/SearchBar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,8 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  console.log('render RootLayout');
-
   return (
     <html lang="en">
       <body className={inter.className}>

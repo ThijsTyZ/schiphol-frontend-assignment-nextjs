@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Pages, Params } from '@/app/data/routes';
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { Pages, Params } from '@/data/routes';
 
 export type SearchFormProps = {};
 
@@ -16,16 +16,22 @@ export default function SearchBar({}: SearchFormProps) {
     [router],
   );
 
-  const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    search(new FormData(event.currentTarget).get(Params.Query) as string);
-  }, []);
+  const onSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      search(new FormData(event.currentTarget).get(Params.Query) as string);
+    },
+    [search],
+  );
 
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checkValidity()) {
-      search(event.target.value);
-    }
-  }, []);
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checkValidity()) {
+        search(event.target.value);
+      }
+    },
+    [search],
+  );
 
   return (
     <section className="flex flex-col items-center justify-center">

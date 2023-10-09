@@ -1,4 +1,4 @@
-import { TypedString } from '@/app/data/TypedString';
+import { TypedString } from '@/data/TypedString';
 
 export type Flight = {
   flightIdentifier: FlightIdentifier;

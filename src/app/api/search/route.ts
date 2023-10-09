@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import flights from '../../data/flights.json';
-import { Params } from '@/app/data/routes';
-import { SortDirection, SortOn } from '@/app/data/sorting';
-import { Flight } from '@/app/data/Flight';
+import flights from '../../../data/flights.json';
+import { Params } from '@/data/routes';
+import { SortDirection, SortOn } from '@/data/sorting';
+import { Flight } from '@/data/Flight';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -15,8 +15,7 @@ export async function GET(request: NextRequest) {
     .filter((flight) => flight.airport.toLowerCase().includes(query.toLowerCase()))
     .sort((flight1, flight2) => {
       switch (sortOn) {
-        case null:
-        case undefined:
+        default:
           return 0;
         case 'date': {
           return (
@@ -29,9 +28,6 @@ export async function GET(request: NextRequest) {
         }
         case 'flightNumber': {
           return flight1.airport.localeCompare(flight2.airport);
-        }
-        default: {
-          throw new Error(`Invalid sortBy option: ${sortOn}`);
         }
       }
     })
