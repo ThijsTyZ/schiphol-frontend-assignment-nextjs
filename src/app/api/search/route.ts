@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import flights from '../../../data/flights.json';
-import { Params } from '@/data/routes';
+import { SearchParams } from '@/data/routes';
 import { SortDirection, SortOn } from '@/data/sorting';
 import { Flight } from '@/data/Flight';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
-  const query = searchParams.get(Params.Query) ?? '';
-  const sortOn = searchParams.get(Params.SortOn) as SortOn | null;
-  const sortDirection = searchParams.get(Params.SortDirection) as SortDirection | null;
-  const limit = parseInt(searchParams.get(Params.Limit) ?? '', 10) ?? 10;
+  const query = searchParams.get(SearchParams.Query) ?? '';
+  const sortOn = searchParams.get(SearchParams.SortOn) as SortOn | null;
+  const sortDirection = searchParams.get(SearchParams.SortDirection) as SortDirection | null;
+  const limit = parseInt(searchParams.get(SearchParams.Limit) ?? '', 10) ?? 10;
 
   const results = (flights.flights as unknown as ReadonlyArray<Flight>)
     .filter((flight) => flight.airport.toLowerCase().includes(query.toLowerCase()))

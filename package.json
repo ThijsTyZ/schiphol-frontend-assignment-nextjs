@@ -12,7 +12,8 @@
     "@mediamonks/prettier-config": "^1.0.1",
     "next": "13.5.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "router-path": "^2.2.1"
   },
   "devDependencies": {
     "@mediamonks/eslint-config": "^2.3.0",

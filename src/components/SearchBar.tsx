@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Pages, Params } from '@/data/routes';
+import { Pages, SearchParams } from '@/data/routes';
 
 export type SearchFormProps = {};
 
@@ -11,7 +11,7 @@ export default function SearchBar({}: SearchFormProps) {
 
   const search = useCallback(
     (query?: string) => {
-      router.replace(`${Pages.Search}?${Params.Query}=${query}`);
+      router.replace(`${Pages.Search}?${SearchParams.Query}=${query}`);
     },
     [router],
   );
@@ -19,7 +19,7 @@ export default function SearchBar({}: SearchFormProps) {
   const onSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      search(new FormData(event.currentTarget).get(Params.Query) as string);
+      search(new FormData(event.currentTarget).get(SearchParams.Query) as string);
     },
     [search],
   );
@@ -42,7 +42,7 @@ export default function SearchBar({}: SearchFormProps) {
           minLength={3}
           required
           onChange={onChange}
-          name={Params.Query}
+          name={SearchParams.Query}
         />
         <button className="rounded border">Search flights</button>
       </form>

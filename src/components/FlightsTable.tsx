@@ -1,6 +1,9 @@
 import React, { useCallback } from 'react';
 import { Flight } from '@/data/Flight';
 import { SortDirection, SortOn } from '@/data/sorting';
+import Link from 'next/link';
+import { DynamicParams, Pages } from '@/data/routes';
+import { createPath } from 'router-path';
 
 export type FlightsTableProps = {
   flights: ReadonlyArray<Flight>;
@@ -21,15 +24,27 @@ function FlightsTable({ flights, ...rest }: FlightsTableProps) {
         </tr>
       </thead>
       <tbody>
-        {flights?.map((flight) => (
-          <tr key={flight.flightIdentifier}>
-            <td>
-              {flight.date} {flight.expectedTime}
-            </td>
-            <td>{flight.airport}</td>
-            <td>{flight.flightNumber}</td>
-          </tr>
-        ))}
+        {flights?.map((flight) => {
+          const href = createPath(Pages.Flight, {
+            [DynamicParams.FlightIdentifier]: flight.flightIdentifier,
+          });
+
+          return (
+            <tr key={flight.flightIdentifier}>
+              <td>
+                <Link href={href}>
+                  {flight.date} {flight.expectedTime}{' '}
+                </Link>
+              </td>
+              <td>
+                <Link href={href}>{flight.airport} </Link>
+              </td>
+              <td>
+                <Link href={href}>{flight.flightNumber} </Link>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

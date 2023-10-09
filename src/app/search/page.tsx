@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Flight } from '@/data/Flight';
 import FlightsTable from '@/components/FlightsTable';
-import { Pages, Params } from '@/data/routes';
+import { Pages, SearchParams } from '@/data/routes';
 import { SortDirection, SortOn } from '@/data/sorting';
 import { search } from '@/data/api';
 
@@ -13,9 +13,9 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const [flights, setFlights] = useState<ReadonlyArray<Flight>>([]);
 
-  const query = searchParams.get(Params.Query);
-  const sortOn = searchParams.get(Params.SortOn) as SortOn;
-  const sortDirection = searchParams.get(Params.SortDirection) as SortDirection;
+  const query = searchParams.get(SearchParams.Query);
+  const sortOn = searchParams.get(SearchParams.SortOn) as SortOn;
+  const sortDirection = searchParams.get(SearchParams.SortDirection) as SortDirection;
 
   useEffect(() => {
     if (query) {
@@ -27,9 +27,9 @@ export default function SearchPage() {
     (field: SortOn) => {
       router.replace(
         `${Pages.Search}?${new URLSearchParams({
-          [Params.Query]: query || '',
-          [Params.SortOn]: field,
-          [Params.SortDirection]:
+          [SearchParams.Query]: query || '',
+          [SearchParams.SortOn]: field,
+          [SearchParams.SortDirection]:
             field === sortOn ? (sortDirection === 'asc' ? 'desc' : 'asc') : 'asc',
         }).toString()}`,
       );

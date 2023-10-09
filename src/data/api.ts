@@ -1,4 +1,4 @@
-import { Api, Params } from '@/data/routes';
+import { Api, SearchParams } from '@/data/routes';
 import { SortDirection, SortOn } from '@/data/sorting';
 import { Flight } from '@/data/Flight';
 
@@ -16,9 +16,9 @@ export async function search({
   return await (
     await fetch(
       `${Api.Search}?${new URLSearchParams({
-        [Params.Query]: query,
-        [Params.SortOn]: sortOn,
-        [Params.SortDirection]: sortDirection,
+        [SearchParams.Query]: query,
+        [SearchParams.SortOn]: sortOn,
+        [SearchParams.SortDirection]: sortDirection,
         limit: limit.toString(10),
       })}`,
     )
