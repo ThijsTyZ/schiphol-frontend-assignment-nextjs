@@ -15,5 +15,6 @@ export const Pages = {
 } as const;
 
 export const Api = {
-  Search: '/api/search',
+  Search: `${process.env.NEXT_PUBLIC_API}/search`,
+  Flight: `${process.env.NEXT_PUBLIC_API}/flight/[${DynamicParams.FlightIdentifier}]`,
 } as const;

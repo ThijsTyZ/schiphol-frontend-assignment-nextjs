@@ -1,6 +1,7 @@
-import { Api, SearchParams } from '@/data/routes';
+import { Api, DynamicParams, SearchParams } from '@/data/routes';
 import { SortDirection, SortOn } from '@/data/sorting';
-import { Flight } from '@/data/Flight';
+import { Flight, FlightIdentifier } from '@/data/Flight';
+import { createPath } from 'router-path';
 
 export async function search({
   query,
@@ -22,5 +23,11 @@ export async function search({
         limit: limit.toString(10),
       })}`,
     )
+  ).json();
+}
+
+export async function getFlight(flightIdentifier: FlightIdentifier): Promise<Flight> {
+  return await (
+    await fetch(createPath(Api.Flight, { [DynamicParams.FlightIdentifier]: flightIdentifier }))
   ).json();
 }
