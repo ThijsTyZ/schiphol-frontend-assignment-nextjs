@@ -1,13 +1,22 @@
 'use client';
 
-import { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Pages, SearchParams } from '@/data/routes';
 
 export type SearchFormProps = {};
 
 export default function SearchBar({}: SearchFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const query = searchParams.get(SearchParams.Query);
+    if (input.current && input.current.value !== query) {
+      input.current.value = query || '';
+    }
+  }, [searchParams]);
 
   const search = useCallback(
     (query?: string) => {
@@ -37,6 +46,7 @@ export default function SearchBar({}: SearchFormProps) {
     <section className="flex flex-col items-center justify-center">
       <form onSubmit={onSubmit} method="GET" action={Pages.Search}>
         <input
+          ref={input}
           className="rounded border"
           placeholder="airport name"
           minLength={3}
