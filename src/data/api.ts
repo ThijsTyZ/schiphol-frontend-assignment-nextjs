@@ -27,7 +27,15 @@ export async function search({
 }
 
 export async function getFlight(flightIdentifier: FlightIdentifier): Promise<Flight> {
-  return await (
-    await fetch(createPath(Api.Flight, { [DynamicParams.FlightIdentifier]: flightIdentifier }))
-  ).json();
+  const response = await fetch(
+    createPath(Api.Flight, { [DynamicParams.FlightIdentifier]: flightIdentifier }),
+  );
+  const json = await response.json();
+
+  switch (response.status) {
+    case 200:
+      return json;
+    default:
+      throw new Error(json);
+  }
 }
