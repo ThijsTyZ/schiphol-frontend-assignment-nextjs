@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Pages, SearchParams } from '@/data/routes';
 
@@ -10,6 +10,8 @@ export default function SearchBar({}: SearchFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const input = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState<string | null>(null);
+  const deferredQuery = useDeferredValue(query);
 
   useEffect(() => {
     const query = searchParams.get(SearchParams.Query);
@@ -18,29 +20,22 @@ export default function SearchBar({}: SearchFormProps) {
     }
   }, [searchParams]);
 
-  const search = useCallback(
-    (query?: string) => {
-      router.replace(`${Pages.Search}?${SearchParams.Query}=${query}`);
-    },
-    [router],
-  );
+  const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setQuery(new FormData(event.currentTarget).get(SearchParams.Query) as string);
+  }, []);
 
-  const onSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      search(new FormData(event.currentTarget).get(SearchParams.Query) as string);
-    },
-    [search],
-  );
+  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checkValidity()) {
+      setQuery(event.target.value);
+    }
+  }, []);
 
-  const onChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checkValidity()) {
-        search(event.target.value);
-      }
-    },
-    [search],
-  );
+  useEffect(() => {
+    if (deferredQuery) {
+      router.replace(`${Pages.Search}?${SearchParams.Query}=${deferredQuery}`);
+    }
+  }, [deferredQuery, router]);
 
   return (
     <section className="flex flex-col items-center justify-center">

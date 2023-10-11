@@ -1,24 +1,39 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
 import { Flight } from '@/data/Flight';
 import FlightsTable from '@/components/FlightsTable';
 import { Pages, SearchParams } from '@/data/routes';
-import { SortDirection, SortOn } from '@/data/sorting';
+import { getSortDirection, getSortOn, SortDirection, SortOn } from '@/data/sorting';
 import { search } from '@/data/api';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-export default function SearchPage() {
+type SearchClientPage = {
+  flights: ReadonlyArray<Flight>;
+  query: string;
+  sortOn: SortOn;
+  sortDirection: SortDirection;
+};
+
+export function SearchClientPage(props: SearchClientPage) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [flights, setFlights] = useState<ReadonlyArray<Flight>>([]);
-
-  const query = searchParams.get(SearchParams.Query);
-  const sortOn = searchParams.get(SearchParams.SortOn) as SortOn;
-  const sortDirection = searchParams.get(SearchParams.SortDirection) as SortDirection;
+  const [flights, setFlights] = useState<ReadonlyArray<Flight>>(props.flights);
+  const [query, setQuery] = useState<string | null>(props.query);
+  const [sortOn, setSortOn] = useState<SortOn>(props.sortOn);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(props.sortDirection);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (query) {
+    setQuery(searchParams.get(SearchParams.Query));
+    setSortOn(getSortOn(searchParams.get(SearchParams.SortOn)));
+    setSortDirection(getSortDirection(searchParams.get(SearchParams.SortDirection)));
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else if (query) {
       search({ query, sortOn, sortDirection }).then(setFlights);
     }
   }, [query, sortOn, sortDirection]);
