@@ -1,15 +1,15 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Flight } from '@/data/Flight';
 import { SortDirection, SortOn } from '@/data/sorting';
 import Link from 'next/link';
-import { DynamicParams, Pages } from '@/data/routes';
+import { DynamicParams, Pages, SearchParams } from '@/data/routes';
 import { createPath } from 'router-path';
+import { useSearchParams } from 'next/navigation';
 
 export type FlightsTableProps = {
   flights: ReadonlyArray<Flight>;
   sortOn?: SortOn;
   sortDirection?: SortDirection;
-  onHeaderClick: (field: SortOn) => void;
 };
 
 function FlightsTable({ flights, ...rest }: FlightsTableProps) {
@@ -55,15 +55,21 @@ type TableHeaderProps = {
   field: SortOn;
 } & Omit<FlightsTableProps, 'flights'>;
 
-function TableHeader({ label, field, sortOn, sortDirection, onHeaderClick }: TableHeaderProps) {
-  const onClick = useCallback(() => {
-    onHeaderClick(field);
-  }, [field, onHeaderClick]);
+function TableHeader({ label, field, sortOn, sortDirection }: TableHeaderProps) {
+  const searchParams = new URLSearchParams(useSearchParams());
+
+  if (searchParams.get(SearchParams.SortOn) === field) {
+    searchParams.set(SearchParams.SortDirection, sortDirection === 'asc' ? 'desc' : 'asc');
+  } else {
+    searchParams.set(SearchParams.SortOn, field);
+  }
 
   return (
-    <th scope="col" onClick={onClick}>
-      {label}
-      {field && field === sortOn && (sortDirection === 'asc' ? <>↓</> : <>↑</>)}
+    <th scope="col">
+      <Link href={`?${searchParams.toString()}`} replace>
+        {label}
+        {field && field === sortOn && (sortDirection === 'asc' ? <>↓</> : <>↑</>)}
+      </Link>
     </th>
   );
 }

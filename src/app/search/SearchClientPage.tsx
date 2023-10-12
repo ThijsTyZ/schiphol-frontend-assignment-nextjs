@@ -1,12 +1,12 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Flight } from '@/data/Flight';
 import FlightsTable from '@/components/FlightsTable';
-import { Pages, SearchParams } from '@/data/routes';
+import { SearchParams } from '@/data/routes';
 import { getSortDirection, getSortOn, SortDirection, SortOn } from '@/data/sorting';
 import { search } from '@/data/api';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type SearchClientPage = {
   flights: ReadonlyArray<Flight>;
@@ -16,7 +16,6 @@ type SearchClientPage = {
 };
 
 export function SearchClientPage(props: SearchClientPage) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [flights, setFlights] = useState<ReadonlyArray<Flight>>(props.flights);
   const [query, setQuery] = useState<string | null>(props.query);
@@ -38,30 +37,11 @@ export function SearchClientPage(props: SearchClientPage) {
     }
   }, [query, sortOn, sortDirection]);
 
-  const onHeaderClick = useCallback(
-    (field: SortOn) => {
-      router.replace(
-        `${Pages.Search}?${new URLSearchParams({
-          [SearchParams.Query]: query || '',
-          [SearchParams.SortOn]: field,
-          [SearchParams.SortDirection]:
-            field === sortOn ? (sortDirection === 'asc' ? 'desc' : 'asc') : 'asc',
-        }).toString()}`,
-      );
-    },
-    [router, query, sortOn, sortDirection],
-  );
-
   return (
     <>
       <h1>Search Page </h1>
       {flights.length ? (
-        <FlightsTable
-          flights={flights}
-          sortOn={sortOn}
-          sortDirection={sortDirection}
-          onHeaderClick={onHeaderClick}
-        />
+        <FlightsTable flights={flights} sortOn={sortOn} sortDirection={sortDirection} />
       ) : undefined}
     </>
   );

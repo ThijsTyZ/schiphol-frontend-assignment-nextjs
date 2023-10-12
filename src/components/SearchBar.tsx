@@ -4,9 +4,7 @@ import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'reac
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Pages, SearchParams } from '@/data/routes';
 
-export type SearchFormProps = {};
-
-export default function SearchBar({}: SearchFormProps) {
+export default function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const input = useRef<HTMLInputElement>(null);
